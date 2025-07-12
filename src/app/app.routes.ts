@@ -1,15 +1,9 @@
-// app.routes.ts
 import { Routes } from '@angular/router';
-import { AppComponent } from './app/app.component';
+import { HomeComponent } from './pages/home/home.component';
 import { ProfileViewComponent } from './profile-view/profile-view.component';
 
 export const routes: Routes = [
-  {
-    path: '',
-    component: AppComponent,
-    children: [
-      { path: '', component: ProfileViewComponent }
-    ]
-  },
-  { path: '**', redirectTo: '' }
+  { path: '', component: HomeComponent },          // Show Home page at /
+  { path: 'profile', component: ProfileViewComponent },  // Portfolio view at /profile
+  { path: '**', redirectTo: '' }                   // Fallback
 ];
