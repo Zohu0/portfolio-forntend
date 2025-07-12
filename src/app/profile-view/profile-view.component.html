@@ -5,6 +5,53 @@
     <p><strong>About Me:</strong> {{ user.about_me }}</p>
     <p><strong>Address:</strong> {{ user.address }}</p>
   </div>
+
+ <h2>Education</h2>
+
+<ul *ngIf="educationList.length > 0; else noEducation">
+  <li *ngFor="let edu of educationList">
+    {{ edu.degree }} at {{ edu.institution }} ({{ edu.start_year }} - {{ edu.end_year }})
+  </li>
+</ul>
+
+<ng-template #noEducation>
+  <p>No education records found.</p>
+</ng-template>
+
+<ul *ngIf="projectList.length > 0; else noProject">
+  <li *ngFor="let project of projectList">
+    {{ project.title }} at {{ project.description }} ({{ project.technologiesUsed }} - {{ project.projectUrl }})
+  </li>
+</ul>
+
+<ng-template #noProject>
+  <p>No project records found.</p>
+</ng-template>
+
+<ng-template #noProject>
+  <p>No project records found.</p>
+</ng-template>
+
+<ul *ngIf="skillList.length > 0; else noSkill">
+  <li *ngFor="let skill of skillList">
+    {{ skill.name }} - {{ skill.level }} 
+  </li>
+</ul>
+
+<ng-template #noSkill>
+  <p>No skill records found.</p>
+</ng-template>
+
+<ul *ngIf="experienceList.length > 0; else noExperience">
+  <li *ngFor="let experience of experienceList">
+    {{ experience.jobTitle }} at {{ experience.company }} ({{ experience.startDate }} - {{ experience.endDate }} - {{ experience.description }})
+  </li>
+</ul>
+
+<ng-template #noExperience>
+  <p>No experience records found.</p>
+</ng-template>
+
   
   <div *ngIf="!user">
     <p>Loading user profile...</p>
