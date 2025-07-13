@@ -5,11 +5,11 @@ import { Education } from "./education.service";
 
 
 export interface Experience {
-  id: number;
+  id?: number;
   jobTitle: string;
   company: string;
-  startDate: string;
-  endDate: string;
+  startDate: number;     // ✅ Integer in backend, should be number
+  endDate: number;       // ✅ Integer in backend, should be number
   description: string;
   user_id: number;
 }

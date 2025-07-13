@@ -1,59 +1,73 @@
-<div *ngIf="user">
-    <h2>{{ user.full_name }}</h2>
-    <p><strong>Email:</strong> {{ user.email }}</p>
-    <p><strong>Phone:</strong> {{ user.phone }}</p>
-    <p><strong>About Me:</strong> {{ user.about_me }}</p>
-    <p><strong>Address:</strong> {{ user.address }}</p>
+<div class="container py-5">
+  <div *ngIf="user; else loading">
+    <!-- Header -->
+    <h2 class="text-center mb-4">{{ user.fullName }}</h2>
+
+    <!-- Basic Info -->
+    <div class="card shadow-sm p-4 mb-4">
+      <h4 class="mb-3">Basic Info</h4>
+      <p><strong>Email:</strong> {{ user.email }}</p>
+      <p><strong>Phone:</strong> {{ user.phone }}</p>
+      <p><strong>Address:</strong> {{ user.address }}</p>
+      <p><strong>About Me:</strong> {{ user.aboutMe }}</p>
+    </div>
+
+    <!-- Education -->
+    <div class="card shadow-sm p-4 mb-4">
+      <h4 class="mb-3">Education</h4>
+      <ul *ngIf="educationList.length > 0; else noEducation" class="list-group list-group-flush">
+        <li *ngFor="let edu of educationList" class="list-group-item">
+          🎓 <strong>{{ edu.degree }}</strong> at {{ edu.institution }}<br />
+          <small>{{ edu.startYear }} - {{ edu.endYear }}</small>
+        </li>
+      </ul>
+      <ng-template #noEducation><p>No education records found.</p></ng-template>
+    </div>
+
+    <!-- Experience -->
+    <div class="card shadow-sm p-4 mb-4">
+      <h4 class="mb-3">Experience</h4>
+      <ul *ngIf="experienceList.length > 0; else noExperience" class="list-group list-group-flush">
+        <li *ngFor="let exp of experienceList" class="list-group-item">
+          💼 <strong>{{ exp.jobTitle }}</strong> at {{ exp.company }}<br />
+          <small>{{ exp.startDate }} - {{ exp.endDate }}</small><br />
+          {{ exp.description }}
+        </li>
+      </ul>
+      <ng-template #noExperience><p>No experience records found.</p></ng-template>
+    </div>
+
+    <!-- Projects -->
+    <div class="card shadow-sm p-4 mb-4">
+      <h4 class="mb-3">Projects</h4>
+      <ul *ngIf="projectList.length > 0; else noProject" class="list-group list-group-flush">
+        <li *ngFor="let proj of projectList" class="list-group-item">
+          🛠️ <strong>{{ proj.title }}</strong><br />
+          {{ proj.description }}<br />
+          <small><strong>Technologies:</strong> {{ proj.technologiesUsed }}</small><br />
+          <a [href]="proj.projectUrl" target="_blank">{{ proj.projectUrl }}</a>
+        </li>
+      </ul>
+      <ng-template #noProject><p>No project records found.</p></ng-template>
+    </div>
+
+    <!-- Skills -->
+    <div class="card shadow-sm p-4 mb-4">
+      <h4 class="mb-3">Skills</h4>
+      <ul *ngIf="skillList.length > 0; else noSkill" class="list-group list-group-flush">
+        <li *ngFor="let skill of skillList" class="list-group-item">
+          🧠 <strong>{{ skill.name }}</strong> - {{ skill.level }}
+        </li>
+      </ul>
+      <ng-template #noSkill><p>No skill records found.</p></ng-template>
+    </div>
   </div>
 
- <h2>Education</h2>
-
-<ul *ngIf="educationList.length > 0; else noEducation">
-  <li *ngFor="let edu of educationList">
-    {{ edu.degree }} at {{ edu.institution }} ({{ edu.start_year }} - {{ edu.end_year }})
-  </li>
-</ul>
-
-<ng-template #noEducation>
-  <p>No education records found.</p>
-</ng-template>
-
-<ul *ngIf="projectList.length > 0; else noProject">
-  <li *ngFor="let project of projectList">
-    {{ project.title }} at {{ project.description }} ({{ project.technologiesUsed }} - {{ project.projectUrl }})
-  </li>
-</ul>
-
-<ng-template #noProject>
-  <p>No project records found.</p>
-</ng-template>
-
-<ng-template #noProject>
-  <p>No project records found.</p>
-</ng-template>
-
-<ul *ngIf="skillList.length > 0; else noSkill">
-  <li *ngFor="let skill of skillList">
-    {{ skill.name }} - {{ skill.level }} 
-  </li>
-</ul>
-
-<ng-template #noSkill>
-  <p>No skill records found.</p>
-</ng-template>
-
-<ul *ngIf="experienceList.length > 0; else noExperience">
-  <li *ngFor="let experience of experienceList">
-    {{ experience.jobTitle }} at {{ experience.company }} ({{ experience.startDate }} - {{ experience.endDate }} - {{ experience.description }})
-  </li>
-</ul>
-
-<ng-template #noExperience>
-  <p>No experience records found.</p>
-</ng-template>
-
-  
-  <div *ngIf="!user">
-    <p>Loading user profile...</p>
-  </div>
-  
+  <!-- Loading -->
+  <ng-template #loading>
+    <div class="text-center">
+      <div class="spinner-border text-primary mb-2" role="status"></div>
+      <p>Loading user profile...</p>
+    </div>
+  </ng-template>
+</div>

@@ -3,11 +3,11 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 export interface User {
-  id: number;
-  full_name: string;
+  id?: number;
+  fullName: string;     // ✅ matches `fullName` (not full_name)
   email: string;
   phone: string;
-  about_me: string;
+  aboutMe: string;
   address: string;
 }
 

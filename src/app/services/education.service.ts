@@ -3,11 +3,11 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 export interface Education {
-  id: number;
+  id?: number;
   degree: string;
   institution: string;
-  start_year: number;
-  end_year: number;
+  startYear: number;     // ✅ matches Java's startYear
+  endYear: number;       // ✅ matches Java's endYear
   user_id: number;
 }
 

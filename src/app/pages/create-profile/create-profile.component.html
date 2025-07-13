@@ -1,0 +1,105 @@
+<div class="container py-5">
+  <h2 class="text-center mb-5 fw-bold text-primary">Create Your Portfolio</h2>
+
+  <form (ngSubmit)="onSubmit()" #userForm="ngForm" class="card shadow-lg p-4 rounded-4">
+
+    <!-- Basic Info -->
+    <div class="row g-3">
+      <div class="col-md-6">
+        <label class="form-label fw-semibold">Full Name</label>
+        <input type="text" class="form-control" [(ngModel)]="user.fullName" name="fullName" required>
+      </div>
+      <div class="col-md-6">
+        <label class="form-label fw-semibold">Email</label>
+        <input type="email" class="form-control" [(ngModel)]="user.email" name="email" required>
+      </div>
+      <div class="col-md-6">
+        <label class="form-label fw-semibold">Phone</label>
+        <input type="text" class="form-control" [(ngModel)]="user.phone" name="phone" required>
+      </div>
+      <div class="col-md-6">
+        <label class="form-label fw-semibold">Address</label>
+        <input type="text" class="form-control" [(ngModel)]="user.address" name="address" required>
+      </div>
+      <div class="col-12">
+        <label class="form-label fw-semibold">About Me</label>
+        <textarea rows="4" class="form-control" [(ngModel)]="user.aboutMe" name="aboutMe" required></textarea>
+      </div>
+    </div>
+
+    <!-- Education Section -->
+    <h4 class="mt-5 text-success fw-bold">Education</h4>
+    <div *ngFor="let edu of user.educations; let i = index" class="row g-3 border rounded p-3 mt-3">
+      <div class="col-md-6">
+        <input type="text" class="form-control" placeholder="Degree" [(ngModel)]="edu.degree" name="degree{{i}}">
+      </div>
+      <div class="col-md-6">
+        <input type="text" class="form-control" placeholder="Institution" [(ngModel)]="edu.institution" name="institution{{i}}">
+      </div>
+      <div class="col-md-6">
+        <input type="number" class="form-control" placeholder="Start Year" [(ngModel)]="edu.startYear" name="startYear{{i}}">
+      </div>
+      <div class="col-md-6">
+        <input type="number" class="form-control" placeholder="End Year" [(ngModel)]="edu.endYear" name="endYear{{i}}">
+      </div>
+    </div>
+    <button type="button" class="btn btn-outline-success mt-3" (click)="addEducation()">+ Add Education</button>
+
+    <!-- Experience Section -->
+    <h4 class="mt-5 text-success fw-bold">Experience</h4>
+    <div *ngFor="let exp of user.experiences; let i = index" class="row g-3 border rounded p-3 mt-3">
+      <div class="col-md-6">
+        <input type="text" class="form-control" placeholder="Job Title" [(ngModel)]="exp.jobTitle" name="jobTitle{{i}}">
+      </div>
+      <div class="col-md-6">
+        <input type="text" class="form-control" placeholder="Company" [(ngModel)]="exp.company" name="company{{i}}">
+      </div>
+      <div class="col-md-6">
+        <input type="number" class="form-control" placeholder="Start Year" [(ngModel)]="exp.startDate" name="startDate{{i}}">
+      </div>
+      <div class="col-md-6">
+        <input type="number" class="form-control" placeholder="End Year" [(ngModel)]="exp.endDate" name="endDate{{i}}">
+      </div>
+      <div class="col-12">
+        <textarea class="form-control" rows="2" placeholder="Description" [(ngModel)]="exp.description" name="desc{{i}}"></textarea>
+      </div>
+    </div>
+    <button type="button" class="btn btn-outline-success mt-3" (click)="addExperience()">+ Add Experience</button>
+
+    <!-- Projects Section -->
+    <h4 class="mt-5 text-success fw-bold">Projects</h4>
+    <div *ngFor="let project of user.projects; let i = index" class="row g-3 border rounded p-3 mt-3">
+      <div class="col-md-6">
+        <input type="text" class="form-control" placeholder="Project Title" [(ngModel)]="project.title" name="projectTitle{{i}}">
+      </div>
+      <div class="col-md-6">
+        <input type="url" class="form-control" placeholder="Project URL" [(ngModel)]="project.projectUrl" name="projectUrl{{i}}">
+      </div>
+      <div class="col-12">
+        <textarea class="form-control" rows="2" placeholder="Description" [(ngModel)]="project.description" name="projectDesc{{i}}"></textarea>
+      </div>
+      <div class="col-12">
+        <input type="text" class="form-control" placeholder="Technologies Used" [(ngModel)]="project.technologiesUsed" name="techUsed{{i}}">
+      </div>
+    </div>
+    <button type="button" class="btn btn-outline-success mt-3" (click)="addProject()">+ Add Project</button>
+
+    <!-- Skills Section -->
+    <h4 class="mt-5 text-success fw-bold">Skills</h4>
+    <div *ngFor="let skill of user.skills; let i = index" class="row g-3 border rounded p-3 mt-3">
+      <div class="col-md-6">
+        <input type="text" class="form-control" placeholder="Skill Name" [(ngModel)]="skill.name" name="skillName{{i}}">
+      </div>
+      <div class="col-md-6">
+        <input type="text" class="form-control" placeholder="Proficiency Level" [(ngModel)]="skill.level" name="skillLevel{{i}}">
+      </div>
+    </div>
+    <button type="button" class="btn btn-outline-success mt-3" (click)="addSkill()">+ Add Skill</button>
+
+    <!-- Submit -->
+    <div class="text-center mt-5">
+      <button type="submit" class="btn btn-primary px-5 py-2 fw-semibold fs-5">🚀 Create Portfolio</button>
+    </div>
+
+  </form>
+</div>
