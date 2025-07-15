@@ -1,4 +1,4 @@
-// This file is only for form submission
+// This file is only for form user submission
 
 export interface EducationInput {
   degree: string;
@@ -38,3 +38,5 @@ export interface UserInput {
   skills: SkillInput[];
   projects: ProjectInput[];
 }
+
+

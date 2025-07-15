@@ -4,13 +4,48 @@
     <h2 class="text-center mb-4">{{ user.fullName }}</h2>
 
     <!-- Basic Info -->
-    <div class="card shadow-sm p-4 mb-4">
-      <h4 class="mb-3">Basic Info</h4>
-      <p><strong>Email:</strong> {{ user.email }}</p>
-      <p><strong>Phone:</strong> {{ user.phone }}</p>
-      <p><strong>Address:</strong> {{ user.address }}</p>
-      <p><strong>About Me:</strong> {{ user.aboutMe }}</p>
+    <div class="card shadow-sm p-4 mb-4 position-relative">
+      <h4 class="mb-3">
+        Basic Info
+      </h4>
+
+      <div *ngIf="!isEditing; else editMode">
+        <p><strong>Email:</strong> {{ user.email }}</p>
+        <p><strong>Phone:</strong> {{ user.phone }}</p>
+        <p><strong>Address:</strong> {{ user.address }}</p>
+        <p><strong>About Me:</strong> {{ user.aboutMe }}</p>
+      </div>
+
+      <ng-template #editMode>
+        <form (ngSubmit)="submitUpdateBasicInfo()" #userForm="ngForm">
+          <div class="mb-2">
+            <label>Email</label>
+            <input class="form-control" [(ngModel)]="editableUser.email" name="email" required />
+          </div>
+          <div class="mb-2">
+            <label>Phone</label>
+            <input class="form-control" [(ngModel)]="editableUser.phone" name="phone" required />
+          </div>
+          <div class="mb-2">
+            <label>Address</label>
+            <input class="form-control" [(ngModel)]="editableUser.address" name="address" />
+          </div>
+          <div class="mb-2">
+            <label>About Me</label>
+            <textarea class="form-control" [(ngModel)]="editableUser.aboutMe" name="aboutMe"></textarea>
+          </div>
+        </form>
+      </ng-template>
+
+      <!-- Button at bottom-right -->
+      <div class="d-flex justify-content-end mt-3">
+        <button class="btn btn-sm btn-outline-success" (click)="onEditToggle()">
+          {{ isEditing ? 'Submit' : 'Edit' }}
+        </button>
+      </div>
     </div>
+
+
 
     <!-- Education -->
     <div class="card shadow-sm p-4 mb-4">
@@ -21,7 +56,9 @@
           <small>{{ edu.startYear }} - {{ edu.endYear }}</small>
         </li>
       </ul>
-      <ng-template #noEducation><p>No education records found.</p></ng-template>
+      <ng-template #noEducation>
+        <p>No education records found.</p>
+      </ng-template>
     </div>
 
     <!-- Experience -->
@@ -34,7 +71,9 @@
           {{ exp.description }}
         </li>
       </ul>
-      <ng-template #noExperience><p>No experience records found.</p></ng-template>
+      <ng-template #noExperience>
+        <p>No experience records found.</p>
+      </ng-template>
     </div>
 
     <!-- Projects -->
@@ -48,7 +87,9 @@
           <a [href]="proj.projectUrl" target="_blank">{{ proj.projectUrl }}</a>
         </li>
       </ul>
-      <ng-template #noProject><p>No project records found.</p></ng-template>
+      <ng-template #noProject>
+        <p>No project records found.</p>
+      </ng-template>
     </div>
 
     <!-- Skills -->
@@ -59,7 +100,9 @@
           🧠 <strong>{{ skill.name }}</strong> - {{ skill.level }}
         </li>
       </ul>
-      <ng-template #noSkill><p>No skill records found.</p></ng-template>
+      <ng-template #noSkill>
+        <p>No skill records found.</p>
+      </ng-template>
     </div>
   </div>
 

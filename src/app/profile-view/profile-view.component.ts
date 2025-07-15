@@ -1,29 +1,31 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { UserService, User } from '../services/user.service';
-import { RouterOutlet } from '@angular/router';
+import { RouterOutlet, ActivatedRoute } from '@angular/router';
 import { Education, EducationService } from '../services/education.service';
 import { Project, ProjectService } from '../services/project.service';
 import { Skill, SkillService } from '../services/skill.service';
 import { Experience, ExperienceService } from '../services/experience.service';
-import { ActivatedRoute } from '@angular/router';
+import { UserBasicInput } from '../models/user-updation-model';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-profile-view',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './profile-view.component.html',
   styleUrls: ['./profile-view.component.css'],
 })
 export class ProfileViewComponent implements OnInit {
   user: User | null = null;
+  
+  editableUser!: UserBasicInput;
+  isEditing: boolean = false;
+  userId!: number;
 
   educationList: Education[] = [];
-
   projectList: Project[] = [];
-
   skillList: Skill[] = [];
-
   experienceList: Experience[] = [];
 
   constructor(
@@ -36,14 +38,15 @@ export class ProfileViewComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    const userId = Number(this.route.snapshot.paramMap.get('id'));
+    this.userId = Number(this.route.snapshot.paramMap.get('id'));
 
-    if (!userId) {
+    if (!this.userId) {
       console.error('No user ID found in route.');
       return;
-    } 
+    }
 
-    this.userService.getUserById(userId).subscribe({
+    // Fetch user
+    this.userService.getUserById(this.userId).subscribe({
       next: (data) => {
         this.user = data;
       },
@@ -52,36 +55,61 @@ export class ProfileViewComponent implements OnInit {
       },
     });
 
-    this.educationService.getEducationByUserId(userId).subscribe({
+    // Fetch other data
+    this.educationService.getEducationByUserId(this.userId).subscribe({
       next: (data) => {
-        console.log('Education data:', data);
         this.educationList = data;
       },
       error: (err) => console.error('Failed to load education:', err),
     });
 
-    this.projectService.getProjectByUserId(userId).subscribe({
+    this.projectService.getProjectByUserId(this.userId).subscribe({
       next: (data) => {
-        console.log('Project data:', data);
         this.projectList = data;
       },
-      error: (err) => console.error('Failed to load education:', err),
+      error: (err) => console.error('Failed to load project:', err),
     });
 
-    this.skillService.getskillByUserId(userId).subscribe({
+    this.skillService.getskillByUserId(this.userId).subscribe({
       next: (data) => {
-        console.log('Skill data:', data);
         this.skillList = data;
       },
-      error: (err) => console.error('Failed to load education:', err),
+      error: (err) => console.error('Failed to load skill:', err),
     });
 
-    this.experienceService.getexperienceByUserId(userId).subscribe({
+    this.experienceService.getexperienceByUserId(this.userId).subscribe({
       next: (data) => {
-        console.log('ExperienceData data:', data);
         this.experienceList = data;
       },
-      error: (err) => console.error('Failed to load education:', err),
+      error: (err) => console.error('Failed to load experience:', err),
+    });
+  }
+
+  onEditToggle() {
+    if (!this.isEditing && this.user) {
+      this.editableUser = {
+        fullName: this.user.fullName,
+        email: this.user.email,
+        phone: this.user.phone,
+        aboutMe: this.user.aboutMe,
+        address: this.user.address,
+      };
+      this.isEditing = true;
+    } else {
+      this.submitUpdateBasicInfo();
+    }
+  }
+
+  submitUpdateBasicInfo() {
+    this.userService.updateUserBasicInfo(this.userId, this.editableUser).subscribe({
+      next: (updatedUser) => {
+        this.user = updatedUser;
+        this.isEditing = false;
+        console.log('User updated successfully');
+      },
+      error: (err) => {
+        console.error('Failed to update user', err);
+      }
     });
   }
 }
