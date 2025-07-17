@@ -8,6 +8,8 @@ import { Skill, SkillService } from '../services/skill.service';
 import { Experience, ExperienceService } from '../services/experience.service';
 import { UserBasicInput } from '../models/user-updation-model';
 import { FormsModule } from '@angular/forms';
+import { HttpClient } from '@angular/common/http';
+
 
 @Component({
   selector: 'app-profile-view',
@@ -34,7 +36,8 @@ export class ProfileViewComponent implements OnInit {
     private educationService: EducationService,
     private projectService: ProjectService,
     private skillService: SkillService,
-    private experienceService: ExperienceService
+    private experienceService: ExperienceService,
+    private http: HttpClient 
   ) {}
 
   ngOnInit(): void {
@@ -112,4 +115,30 @@ export class ProfileViewComponent implements OnInit {
       }
     });
   }
+
+  loadUser() {
+    this.userService.getUserById(this.userId).subscribe({
+      next: (data) => (this.user = data),
+      error: (err) => console.error('Error fetching user:', err),
+    });
+  }
+
+  onImageSelected(event: any) {
+    const file: File = event.target.files[0];
+    if (file && this.user) {
+      const formData = new FormData();
+      formData.append("image", file); // ✅ correct
+  
+      this.http.put(`http://localhost:8080/usercontroller/uploadprofile/${this.user.id}`, formData).subscribe({
+        next: (res) => {
+          console.log('Image uploaded successfully', res);
+          this.loadUser(); // Refresh profile data
+        },
+        error: (err) => {
+          console.error('Image upload failed', err);
+        }
+      });
+    }
+  }
+  
 }

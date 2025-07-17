@@ -37,7 +37,7 @@ export class CreateProfileComponent {
   constructor(private http: HttpClient, private router: Router) {}
 
   onSubmit() {
-    this.http.post<any>('http://localhost:8080/usercontroller/createuser', this.user).subscribe({
+    this.http.post<any>('http://localhost:8080/usercontroller/createuserwithimage', this.user).subscribe({
       next: (res) => {
         console.log('Response:', res);
         this.router.navigate(['/profile', res.userId]); // ✅ Use userId from backend

@@ -10,6 +10,7 @@ export interface User {
   phone: string;
   aboutMe: string;
   address: string;
+  profileImageUrl:string;
 }
 
 @Injectable({
