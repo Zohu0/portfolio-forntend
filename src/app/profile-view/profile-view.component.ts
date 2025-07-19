@@ -10,7 +10,6 @@ import { UserBasicInput } from '../models/user-updation-model';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 
-
 @Component({
   selector: 'app-profile-view',
   standalone: true,
@@ -20,7 +19,6 @@ import { HttpClient } from '@angular/common/http';
 })
 export class ProfileViewComponent implements OnInit {
   user: User | null = null;
-  
   editableUser!: UserBasicInput;
   isEditing: boolean = false;
   userId!: number;
@@ -37,18 +35,22 @@ export class ProfileViewComponent implements OnInit {
     private projectService: ProjectService,
     private skillService: SkillService,
     private experienceService: ExperienceService,
-    private http: HttpClient 
+    private http: HttpClient
   ) {}
 
   ngOnInit(): void {
-    this.userId = Number(this.route.snapshot.paramMap.get('id'));
-
-    if (!this.userId) {
+    const idFromRoute = this.route.snapshot.paramMap.get('id');
+    if (!idFromRoute) {
       console.error('No user ID found in route.');
       return;
     }
 
-    // Fetch user
+    this.userId = Number(idFromRoute);
+    this.loadUser();
+    this.loadAllOtherData();
+  }
+
+  loadUser() {
     this.userService.getUserById(this.userId).subscribe({
       next: (data) => {
         this.user = data;
@@ -57,8 +59,9 @@ export class ProfileViewComponent implements OnInit {
         console.error('Error fetching user:', err);
       },
     });
+  }
 
-    // Fetch other data
+  loadAllOtherData() {
     this.educationService.getEducationByUserId(this.userId).subscribe({
       next: (data) => {
         this.educationList = data;
@@ -116,29 +119,27 @@ export class ProfileViewComponent implements OnInit {
     });
   }
 
-  loadUser() {
-    this.userService.getUserById(this.userId).subscribe({
-      next: (data) => (this.user = data),
-      error: (err) => console.error('Error fetching user:', err),
-    });
-  }
-
   onImageSelected(event: any) {
-    const file: File = event.target.files[0];
-    if (file && this.user) {
-      const formData = new FormData();
-      formData.append("image", file); // ✅ correct
-  
-      this.http.put(`http://localhost:8080/usercontroller/uploadprofile/${this.user.id}`, formData).subscribe({
-        next: (res) => {
-          console.log('Image uploaded successfully', res);
-          this.loadUser(); // Refresh profile data
-        },
-        error: (err) => {
-          console.error('Image upload failed', err);
-        }
-      });
-    }
+  const file: File = event.target.files[0];
+  console.log('Selected file:', file);
+  console.log('User:', this.user);
+
+  if (file && this.userId) {
+    const formData = new FormData();
+    formData.append("image", file);
+
+    this.http.put(`http://localhost:8080/usercontroller/uploadprofile/${this.userId}`, formData).subscribe({
+      next: (res) => {
+        console.log('Image uploaded successfully', res);
+        this.loadUser(); // Refresh profile data
+      },
+      error: (err) => {
+        console.error('Image upload failed', err);
+      }
+    });
+  } else {
+    console.warn("User ID is not available for image upload", this.userId);
   }
-  
+}
+
 }
