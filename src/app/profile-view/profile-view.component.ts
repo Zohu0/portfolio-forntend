@@ -113,7 +113,7 @@ export class ProfileViewComponent implements OnInit {
 
       this.http
         .put(
-          `http://localhost:8080/usercontroller/uploadprofile/${this.userId}`,
+          `http://localhost:8080/usercontroller/updateuserimage/${this.userId}`,
           formData
         )
         .subscribe({
