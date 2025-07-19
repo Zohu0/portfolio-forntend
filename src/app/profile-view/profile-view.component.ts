@@ -6,7 +6,7 @@ import { Education, EducationService } from '../services/education.service';
 import { Project, ProjectService } from '../services/project.service';
 import { Skill, SkillService } from '../services/skill.service';
 import { Experience, ExperienceService } from '../services/experience.service';
-import { UserBasicInput } from '../models/user-updation-model';
+import { EducationInput, ExperienceInput, ProjectInput, SkillInput, UserBasicInput } from '../models/user-updation-model';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 
@@ -19,9 +19,20 @@ import { HttpClient } from '@angular/common/http';
 })
 export class ProfileViewComponent implements OnInit {
   user: User | null = null;
-  editableUser!: UserBasicInput;
+  editableUserBasic!: UserBasicInput;
   isEditing: boolean = false;
   userId!: number;
+
+  isEditingEducation = false;
+  isEditingExperience = false;
+  isEditingProjects = false;
+  isEditingSkills = false;
+
+  // Editable copies
+  editableEducationList: EducationInput[] = [];
+  editableExperienceList: ExperienceInput[] = [];
+  editableProjectList: ProjectInput[] = [];
+  editableSkillList: SkillInput[] = [];
 
   educationList: Education[] = [];
   projectList: Project[] = [];
@@ -36,7 +47,7 @@ export class ProfileViewComponent implements OnInit {
     private skillService: SkillService,
     private experienceService: ExperienceService,
     private http: HttpClient
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     const idFromRoute = this.route.snapshot.paramMap.get('id');
@@ -90,10 +101,39 @@ export class ProfileViewComponent implements OnInit {
       error: (err) => console.error('Failed to load experience:', err),
     });
   }
+  // Image Section
+  onImageSelected(event: any) {
+    const file: File = event.target.files[0];
+    console.log('Selected file:', file);
+    console.log('User:', this.user);
 
-  onEditToggle() {
+    if (file && this.userId) {
+      const formData = new FormData();
+      formData.append('image', file);
+
+      this.http
+        .put(
+          `http://localhost:8080/usercontroller/uploadprofile/${this.userId}`,
+          formData
+        )
+        .subscribe({
+          next: (res) => {
+            console.log('Image uploaded successfully', res);
+            this.loadUser(); // Refresh profile data
+          },
+          error: (err) => {
+            console.error('Image upload failed', err);
+          },
+        });
+    } else {
+      console.warn('User ID is not available for image upload', this.userId);
+    }
+  }
+
+  // Basic Info Section
+  onEditToggleBasicInfo() {
     if (!this.isEditing && this.user) {
-      this.editableUser = {
+      this.editableUserBasic = {
         fullName: this.user.fullName,
         email: this.user.email,
         phone: this.user.phone,
@@ -107,39 +147,112 @@ export class ProfileViewComponent implements OnInit {
   }
 
   submitUpdateBasicInfo() {
-    this.userService.updateUserBasicInfo(this.userId, this.editableUser).subscribe({
-      next: (updatedUser) => {
-        this.user = updatedUser;
-        this.isEditing = false;
-        console.log('User updated successfully');
-      },
-      error: (err) => {
-        console.error('Failed to update user', err);
-      }
-    });
+    this.userService
+      .updateUserBasicInfo(this.userId, this.editableUserBasic)
+      .subscribe({
+        next: (updatedUser) => {
+          this.user = updatedUser;
+          this.isEditing = false;
+          console.log('User updated successfully');
+        },
+        error: (err) => {
+          console.error('Failed to update user', err);
+        },
+      });
   }
 
-  onImageSelected(event: any) {
-  const file: File = event.target.files[0];
-  console.log('Selected file:', file);
-  console.log('User:', this.user);
-
-  if (file && this.userId) {
-    const formData = new FormData();
-    formData.append("image", file);
-
-    this.http.put(`http://localhost:8080/usercontroller/uploadprofile/${this.userId}`, formData).subscribe({
-      next: (res) => {
-        console.log('Image uploaded successfully', res);
-        this.loadUser(); // Refresh profile data
-      },
-      error: (err) => {
-        console.error('Image upload failed', err);
-      }
-    });
-  } else {
-    console.warn("User ID is not available for image upload", this.userId);
+  // Education Section
+  onEditEducation() {
+    this.isEditingEducation = true;
+    this.editableEducationList = JSON.parse(JSON.stringify(this.educationList));
   }
-}
+
+  submitEducationUpdate() {
+    const userId = this.userId; // Make sure this is already set in your component (e.g., from route param)
+
+    this.educationService
+      .updateUserEducations(userId, this.editableEducationList)
+      .subscribe({
+        next: (response) => {
+          console.log('Education updated successfully:', response);
+          this.isEditingEducation = false;
+          this.loadAllOtherData(); // reload data to reflect updates
+        },
+        error: (err) => {
+          console.error('Error updating education:', err);
+        },
+      });
+  }
+
+  // Experience Section
+  onEditExperience() {
+    this.isEditingExperience = true;
+    this.editableExperienceList = JSON.parse(JSON.stringify(this.experienceList));
+  }
+
+  submitExperienceUpdate() {
+    const userId = this.userId; // Make sure this is already set in your component (e.g., from route param)
+
+    this.experienceService
+      .updateUserExperience(userId, this.editableExperienceList)
+      .subscribe({
+        next: (response) => {
+          console.log('Experience updated successfully:', response);
+          this.isEditingExperience = false;
+          this.loadAllOtherData(); // reload data to reflect updates
+        },
+        error: (err) => {
+          console.error('Error updating Experience:', err);
+        },
+      });
+  }
+
+  // Project Section
+  onEditProjects() {
+    this.isEditingProjects = true;
+    this.editableProjectList = JSON.parse(JSON.stringify(this.projectList))
+  }
+
+  submitProjectUpdate() {
+    const userId = this.userId; // Make sure this is already set in your component (e.g., from route param)
+
+    this.projectService
+      .updateUserProject(userId, this.editableProjectList)
+      .subscribe({
+        next: (response) => {
+          console.log('Experience updated successfully:', response);
+          this.isEditingProjects = false;
+          this.loadAllOtherData(); // reload data to reflect updates
+        },
+        error: (err) => {
+          console.error('Error updating Experience:', err);
+        },
+      });
+  }
+
+  // Skill Section
+  onEditSkills(){
+    this.isEditingSkills = true;
+    this.editableSkillList = JSON.parse(JSON.stringify(this.skillList))
+  }
+
+  submitSkillUpdate() {
+    const userId = this.userId; // Make sure this is already set in your component (e.g., from route param)
+
+    this.skillService
+      .updateUserSkill(userId, this.editableSkillList)
+      .subscribe({
+        next: (response) => {
+          console.log('Experience updated successfully:', response);
+          this.isEditingSkills = false;
+          this.loadAllOtherData(); // reload data to reflect updates
+        },
+        error: (err) => {
+          console.error('Error updating Experience:', err);
+        },
+      });
+  }
+
+
 
 }

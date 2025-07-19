@@ -2,6 +2,7 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { Education } from "./education.service";
+import { ExperienceInput } from "../models/user-updation-model";
 
 
 export interface Experience {
@@ -26,4 +27,11 @@ export class ExperienceService {
   getexperienceByUserId(userId: number): Observable<Experience[]> {
     return this.http.get<Experience[]>(`${this.baseUrl}/userexperience/${userId}`);
   }
+
+  updateUserExperience(userId: number, experiences: ExperienceInput[]) {
+      return this.http.put<ExperienceInput[]>(
+        `${this.baseUrl}/updateExperience/${userId}`,
+        experiences
+      );
+    }
 }

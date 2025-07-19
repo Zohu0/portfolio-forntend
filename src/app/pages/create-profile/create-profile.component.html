@@ -2,6 +2,17 @@
   <h2 class="text-center mb-5 fw-bold text-primary">Create Your Portfolio</h2>
 
   <form (ngSubmit)="onSubmit()" #userForm="ngForm" class="card shadow-lg p-4 rounded-4">
+    <!-- Profile Image Upload Section -->
+    <div class="text-center mb-4">
+      <img *ngIf="selectedImagePreview" [src]="selectedImagePreview" class="rounded-circle shadow-sm border"
+        alt="Preview" width="120" height="120" />
+      <div class="mt-3">
+        <input type="file" id="imageInput" hidden (change)="onFileSelected($event)" />
+        <label for="imageInput" class="btn btn-sm btn-outline-success px-3 py-1 fw-semibold">
+          <i class="bi bi-upload me-1"></i>Upload Profile Image
+        </label>
+      </div>
+    </div>
 
     <!-- Basic Info -->
     <div class="row g-3">
@@ -34,10 +45,12 @@
         <input type="text" class="form-control" placeholder="Degree" [(ngModel)]="edu.degree" name="degree{{i}}">
       </div>
       <div class="col-md-6">
-        <input type="text" class="form-control" placeholder="Institution" [(ngModel)]="edu.institution" name="institution{{i}}">
+        <input type="text" class="form-control" placeholder="Institution" [(ngModel)]="edu.institution"
+          name="institution{{i}}">
       </div>
       <div class="col-md-6">
-        <input type="number" class="form-control" placeholder="Start Year" [(ngModel)]="edu.startYear" name="startYear{{i}}">
+        <input type="number" class="form-control" placeholder="Start Year" [(ngModel)]="edu.startYear"
+          name="startYear{{i}}">
       </div>
       <div class="col-md-6">
         <input type="number" class="form-control" placeholder="End Year" [(ngModel)]="edu.endYear" name="endYear{{i}}">
@@ -55,13 +68,15 @@
         <input type="text" class="form-control" placeholder="Company" [(ngModel)]="exp.company" name="company{{i}}">
       </div>
       <div class="col-md-6">
-        <input type="number" class="form-control" placeholder="Start Year" [(ngModel)]="exp.startDate" name="startDate{{i}}">
+        <input type="number" class="form-control" placeholder="Start Year" [(ngModel)]="exp.startDate"
+          name="startDate{{i}}">
       </div>
       <div class="col-md-6">
         <input type="number" class="form-control" placeholder="End Year" [(ngModel)]="exp.endDate" name="endDate{{i}}">
       </div>
       <div class="col-12">
-        <textarea class="form-control" rows="2" placeholder="Description" [(ngModel)]="exp.description" name="desc{{i}}"></textarea>
+        <textarea class="form-control" rows="2" placeholder="Description" [(ngModel)]="exp.description"
+          name="desc{{i}}"></textarea>
       </div>
     </div>
     <button type="button" class="btn btn-outline-success mt-3" (click)="addExperience()">+ Add Experience</button>
@@ -70,16 +85,20 @@
     <h4 class="mt-5 text-success fw-bold">Projects</h4>
     <div *ngFor="let project of user.projects; let i = index" class="row g-3 border rounded p-3 mt-3">
       <div class="col-md-6">
-        <input type="text" class="form-control" placeholder="Project Title" [(ngModel)]="project.title" name="projectTitle{{i}}">
+        <input type="text" class="form-control" placeholder="Project Title" [(ngModel)]="project.title"
+          name="projectTitle{{i}}">
       </div>
       <div class="col-md-6">
-        <input type="url" class="form-control" placeholder="Project URL" [(ngModel)]="project.projectUrl" name="projectUrl{{i}}">
+        <input type="url" class="form-control" placeholder="Project URL" [(ngModel)]="project.projectUrl"
+          name="projectUrl{{i}}">
       </div>
       <div class="col-12">
-        <textarea class="form-control" rows="2" placeholder="Description" [(ngModel)]="project.description" name="projectDesc{{i}}"></textarea>
+        <textarea class="form-control" rows="2" placeholder="Description" [(ngModel)]="project.description"
+          name="projectDesc{{i}}"></textarea>
       </div>
       <div class="col-12">
-        <input type="text" class="form-control" placeholder="Technologies Used" [(ngModel)]="project.technologiesUsed" name="techUsed{{i}}">
+        <input type="text" class="form-control" placeholder="Technologies Used" [(ngModel)]="project.technologiesUsed"
+          name="techUsed{{i}}">
       </div>
     </div>
     <button type="button" class="btn btn-outline-success mt-3" (click)="addProject()">+ Add Project</button>
@@ -91,7 +110,8 @@
         <input type="text" class="form-control" placeholder="Skill Name" [(ngModel)]="skill.name" name="skillName{{i}}">
       </div>
       <div class="col-md-6">
-        <input type="text" class="form-control" placeholder="Proficiency Level" [(ngModel)]="skill.level" name="skillLevel{{i}}">
+        <input type="text" class="form-control" placeholder="Proficiency Level" [(ngModel)]="skill.level"
+          name="skillLevel{{i}}">
       </div>
     </div>
     <button type="button" class="btn btn-outline-success mt-3" (click)="addSkill()">+ Add Skill</button>

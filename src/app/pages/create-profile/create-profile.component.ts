@@ -10,7 +10,7 @@ import {
   EducationInput,
   ExperienceInput,
   SkillInput,
-  ProjectInput
+  ProjectInput,
 } from '../../models/user-input.model';
 
 @Component({
@@ -18,7 +18,7 @@ import {
   standalone: true,
   imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterModule],
   templateUrl: './create-profile.component.html',
-  styleUrls: ['./create-profile.component.css']
+  styleUrls: ['./create-profile.component.css'],
 })
 export class CreateProfileComponent {
   // ✅ Strong typing for user object
@@ -31,22 +31,52 @@ export class CreateProfileComponent {
     educations: [],
     experiences: [],
     skills: [],
-    projects: []
+    projects: [],
   };
+
+  selectedFile: File | null = null;
+  selectedImagePreview: string | ArrayBuffer | null = null;
 
   constructor(private http: HttpClient, private router: Router) {}
 
-  onSubmit() {
-    this.http.post<any>('http://localhost:8080/usercontroller/createuserwithimage', this.user).subscribe({
+  onSubmit(): void {
+  const formData = new FormData();
+
+  // Serialize the user object as JSON and append it as a Blob
+  const userJson = JSON.stringify(this.user);
+  formData.append('user', new Blob([userJson], { type: 'application/json' }));
+
+  // Append the selected image file (if any)
+  if (this.selectedFile) {
+    formData.append('image', this.selectedFile);
+  }
+
+  // Make the POST request to backend
+  this.http.post<any>('http://localhost:8080/usercontroller/createuserwithimage', formData)
+    .subscribe({
       next: (res) => {
         console.log('Response:', res);
-        this.router.navigate(['/profile', res.userId]); // ✅ Use userId from backend
+        // Assuming backend returns userId in response
+        this.router.navigate(['/profile', res.userId]);
       },
       error: (err) => {
         console.error('Error creating profile:', err);
         alert('Failed to create profile.');
       }
     });
+}
+
+
+  onFileSelected(event: any): void {
+    const file = event.target.files[0];
+    if (file) {
+      this.selectedFile = file;
+
+      // Preview
+      const reader = new FileReader();
+      reader.onload = () => (this.selectedImagePreview = reader.result);
+      reader.readAsDataURL(file);
+    }
   }
 
   addEducation() {
@@ -54,7 +84,7 @@ export class CreateProfileComponent {
       degree: '',
       institution: '',
       startYear: 0,
-      endYear: 0
+      endYear: 0,
     });
   }
 
@@ -64,14 +94,14 @@ export class CreateProfileComponent {
       company: '',
       startDate: 0,
       endDate: 0,
-      description: ''
+      description: '',
     });
   }
 
   addSkill() {
     this.user.skills.push({
       name: '',
-      level: ''
+      level: '',
     });
   }
 
@@ -80,7 +110,7 @@ export class CreateProfileComponent {
       title: '',
       description: '',
       technologiesUsed: '',
-      projectUrl: ''
+      projectUrl: '',
     });
   }
 }

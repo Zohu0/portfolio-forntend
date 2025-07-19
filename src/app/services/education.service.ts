@@ -1,25 +1,35 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { EducationInput } from '../models/user-updation-model';
 
 export interface Education {
   id?: number;
   degree: string;
   institution: string;
-  startYear: number;     // ✅ matches Java's startYear
-  endYear: number;       // ✅ matches Java's endYear
+  startYear: number; // ✅ matches Java's startYear
+  endYear: number; // ✅ matches Java's endYear
   user_id: number;
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class EducationService {
   private baseUrl = 'http://localhost:8080/educationcontroller';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   getEducationByUserId(userId: number): Observable<Education[]> {
-    return this.http.get<Education[]>(`${this.baseUrl}/usereducation/${userId}`);
+    return this.http.get<Education[]>(
+      `${this.baseUrl}/usereducation/${userId}`
+    );
+  }
+
+  updateUserEducations(userId: number, educations: EducationInput[]) {
+    return this.http.put<EducationInput[]>(
+      `${this.baseUrl}/update/education/${userId}`,
+      educations
+    );
   }
 }

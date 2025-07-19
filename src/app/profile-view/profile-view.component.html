@@ -1,94 +1,69 @@
 <div class="container py-5">
+
+   <!-- Loading Template (must be above the *ngIf="user; else loading") -->
+  <ng-template #loading>
+    <div class="text-center py-5">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+  </ng-template>
+
   <div *ngIf="user; else loading">
     <!-- Profile Image Section -->
     <div class="text-center mb-4">
-      <img
-        [src]="'http://localhost:8080' + user.profileImageUrl"
-        class="rounded-circle border border-2"
-        alt="Profile Image"
-        width="150"
-        height="150"
-      />
-      <div class="mt-3">
-        <label for="imageUpload" class="form-label">Update Profile Image</label>
-        <input
-          type="file"
-          id="imageUpload"
-          class="form-control w-auto mx-auto"
-          (change)="onImageSelected($event)"
-          [disabled]="!userId"
-        />
+      <div class="position-relative d-inline-block">
+        <img [src]="'http://localhost:8080' + user.profileImageUrl" class="rounded-circle border border-3 shadow"
+          alt="Profile Image" width="180" height="180" style="object-fit: cover" />
+      </div>
+      <div class="text-center mt-3">
+        <input type="file" id="imageUpload" hidden (change)="onImageSelected($event)" [disabled]="!userId" />
+        <label for="imageUpload" class="btn btn-sm btn-primary px-4 py-2 fw-semibold">
+          <i class="bi bi-upload me-2"></i>Upload Image
+        </label>
       </div>
     </div>
 
-    <!-- Header -->
-    <h2 class="text-center mb-4">{{ user.fullName }}</h2>
-
-    <!-- Basic Info -->
-    <div class="card shadow-sm p-4 mb-4 position-relative">
-      <h4 class="mb-3">Basic Info</h4>
-
-      <form
-        *ngIf="isEditing; else readMode"
-        (ngSubmit)="submitUpdateBasicInfo()"
-        #userForm="ngForm"
-      >
+    <!-- Basic Info Card -->
+    <div class="card shadow-sm p-4 mb-4 mx-auto" style="max-width: 600px">
+      <form *ngIf="isEditing; else readModeUserBasic" (ngSubmit)="submitUpdateBasicInfo()" #userForm="ngForm">
         <div class="mb-2">
-          <label>Email</label>
-          <input
-            class="form-control"
-            [(ngModel)]="editableUser.email"
-            name="email"
-            required
-          />
+          <label class="form-label">Full Name</label>
+          <input type="text" class="form-control" [(ngModel)]="editableUserBasic.fullName" name="fullName" required />
         </div>
         <div class="mb-2">
-          <label>Phone</label>
-          <input
-            class="form-control"
-            [(ngModel)]="editableUser.phone"
-            name="phone"
-            required
-          />
+          <label class="form-label">Email</label>
+          <input type="email" class="form-control" [(ngModel)]="editableUserBasic.email" name="email" required />
         </div>
         <div class="mb-2">
-          <label>Address</label>
-          <input
-            class="form-control"
-            [(ngModel)]="editableUser.address"
-            name="address"
-          />
+          <label class="form-label">Phone</label>
+          <input type="text" class="form-control" [(ngModel)]="editableUserBasic.phone" name="phone" required />
         </div>
         <div class="mb-2">
-          <label>About Me</label>
-          <textarea
-            class="form-control"
-            [(ngModel)]="editableUser.aboutMe"
-            name="aboutMe"
-          ></textarea>
+          <label class="form-label">Address</label>
+          <input type="text" class="form-control" [(ngModel)]="editableUserBasic.address" name="address" />
+        </div>
+        <div class="mb-2">
+          <label class="form-label">About Me</label>
+          <textarea class="form-control" [(ngModel)]="editableUserBasic.aboutMe" name="aboutMe" rows="3"></textarea>
         </div>
         <div class="d-flex justify-content-end mt-3">
-          <button class="btn btn-sm btn-success" type="submit">Save</button>
-          <button
-            class="btn btn-sm btn-secondary ms-2"
-            type="button"
-            (click)="isEditing = false"
-          >
+          <button class="btn btn-success btn-sm" type="submit">Save</button>
+          <button class="btn btn-secondary btn-sm ms-2" type="button" (click)="isEditing = false">
             Cancel
           </button>
         </div>
       </form>
 
-      <ng-template #readMode>
+      <!-- Read-Only Mode -->
+      <ng-template #readModeUserBasic>
+        <p><strong>Full Name:</strong> {{ user.fullName }}</p>
         <p><strong>Email:</strong> {{ user.email }}</p>
         <p><strong>Phone:</strong> {{ user.phone }}</p>
         <p><strong>Address:</strong> {{ user.address }}</p>
         <p><strong>About Me:</strong> {{ user.aboutMe }}</p>
         <div class="d-flex justify-content-end mt-3">
-          <button
-            class="btn btn-sm btn-outline-success"
-            (click)="onEditToggle()"
-          >
+          <button class="btn btn-outline-success btn-sm" (click)="onEditToggleBasicInfo()">
             Edit
           </button>
         </div>
@@ -98,83 +73,183 @@
     <!-- Education -->
     <div class="card shadow-sm p-4 mb-4">
       <h4 class="mb-3">Education</h4>
-      <ul
-        *ngIf="educationList.length > 0; else noEducation"
-        class="list-group list-group-flush"
-      >
-        <li *ngFor="let edu of educationList" class="list-group-item">
-          🎓 <strong>{{ edu.degree }}</strong> at {{ edu.institution }}<br />
-          <small>{{ edu.startYear }} - {{ edu.endYear }}</small>
-        </li>
-      </ul>
-      <ng-template #noEducation>
-        <p>No education records found.</p>
+
+      <form *ngIf="isEditingEducation; else viewEducation" (ngSubmit)="submitEducationUpdate()">
+        <div *ngFor="let edu of editableEducationList; let i = index" class="mb-3 border-bottom pb-2">
+          <input type="text" class="form-control mb-1" [(ngModel)]="edu.degree" name="degree{{ i }}"
+            placeholder="Degree" required />
+          <input type="text" class="form-control mb-1" [(ngModel)]="edu.institution" name="institution{{ i }}"
+            placeholder="Institution" />
+          <input type="text" class="form-control mb-1" [(ngModel)]="edu.startYear" name="startYear{{ i }}"
+            placeholder="Start Year" />
+          <input type="text" class="form-control mb-1" [(ngModel)]="edu.endYear" name="endYear{{ i }}"
+            placeholder="End Year" />
+        </div>
+        <div class="d-flex justify-content-end">
+          <button type="submit" class="btn btn-success btn-sm">Save</button>
+          <button type="button" class="btn btn-secondary btn-sm ms-2" (click)="isEditingEducation = false">
+            Cancel
+          </button>
+        </div>
+      </form>
+
+      <ng-template #viewEducation>
+        <ul *ngIf="educationList.length > 0; else noEducation" class="list-group list-group-flush">
+          <li *ngFor="let edu of educationList" class="list-group-item">
+            🎓 <strong>{{ edu.degree }}</strong> at {{ edu.institution }}<br />
+            <small>{{ edu.startYear }} - {{ edu.endYear }}</small>
+          </li>
+        </ul>
+        <ng-template #noEducation>
+          <p>No education records found.</p>
+        </ng-template>
+        <div class="d-flex justify-content-end mt-3">
+          <button class="btn btn-outline-success btn-sm" (click)="onEditEducation()">
+            Edit
+          </button>
+        </div>
       </ng-template>
     </div>
+
 
     <!-- Experience -->
     <div class="card shadow-sm p-4 mb-4">
       <h4 class="mb-3">Experience</h4>
-      <ul
-        *ngIf="experienceList.length > 0; else noExperience"
-        class="list-group list-group-flush"
-      >
-        <li *ngFor="let exp of experienceList" class="list-group-item">
-          💼 <strong>{{ exp.jobTitle }}</strong> at {{ exp.company }}<br />
-          <small>{{ exp.startDate }} - {{ exp.endDate }}</small
-          ><br />
-          {{ exp.description }}
-        </li>
-      </ul>
-      <ng-template #noExperience>
-        <p>No experience records found.</p>
+
+      <form *ngIf="isEditingExperience; else viewExperience" (ngSubmit)="submitExperienceUpdate()">
+        <div *ngFor="let exp of editableExperienceList; let i = index" class="mb-3 border-bottom pb-2">
+          <input type="text" class="form-control mb-1" [(ngModel)]="exp.jobTitle" name="jobTitle{{ i }}"
+            placeholder="Job Title" required />
+          <input type="text" class="form-control mb-1" [(ngModel)]="exp.company" name="company{{ i }}"
+            placeholder="Company" />
+          <input type="text" class="form-control mb-1" [(ngModel)]="exp.startDate" name="startDate{{ i }}"
+            placeholder="Start Date" />
+          <input type="text" class="form-control mb-1" [(ngModel)]="exp.endDate" name="endDate{{ i }}"
+            placeholder="End Date" />
+          <textarea class="form-control mb-1" [(ngModel)]="exp.description" name="description{{ i }}"
+            placeholder="Description"></textarea>
+        </div>
+        <div class="d-flex justify-content-end">
+          <button type="submit" class="btn btn-success btn-sm">Save</button>
+          <button type="button" class="btn btn-secondary btn-sm ms-2" (click)="isEditingExperience = false">
+            Cancel
+          </button>
+        </div>
+      </form>
+
+      <ng-template #viewExperience>
+        <ul *ngIf="experienceList.length > 0; else noExperience" class="list-group list-group-flush">
+          <li *ngFor="let exp of experienceList" class="list-group-item">
+            💼 <strong>{{ exp.jobTitle }}</strong> at {{ exp.company }}<br />
+            <small>{{ exp.startDate }} - {{ exp.endDate }}</small><br />
+            {{ exp.description }}
+          </li>
+        </ul>
+        <ng-template #noExperience>
+          <p>No experience records found.</p>
+        </ng-template>
+        <div class="d-flex justify-content-end mt-3">
+          <button class="btn btn-outline-success btn-sm" (click)="onEditExperience()">
+            Edit
+          </button>
+        </div>
       </ng-template>
     </div>
+
 
     <!-- Projects -->
-    <div class="card shadow-sm p-4 mb-4">
-      <h4 class="mb-3">Projects</h4>
-      <ul
-        *ngIf="projectList.length > 0; else noProject"
-        class="list-group list-group-flush"
-      >
-        <li *ngFor="let proj of projectList" class="list-group-item">
-          🛠️ <strong>{{ proj.title }}</strong
-          ><br />
-          {{ proj.description }}<br />
-          <small
-            ><strong>Technologies:</strong> {{ proj.technologiesUsed }}</small
-          ><br />
-          <a [href]="proj.projectUrl" target="_blank">{{ proj.projectUrl }}</a>
-        </li>
-      </ul>
-      <ng-template #noProject>
-        <p>No project records found.</p>
-      </ng-template>
+<div class="card shadow-sm p-4 mb-4">
+  <h4 class="mb-3">Projects</h4>
+
+  <!-- Editable Form -->
+  <form *ngIf="isEditingProjects; else viewProjects" (ngSubmit)="submitProjectUpdate()">
+    <div *ngFor="let proj of editableProjectList; let i = index" class="mb-3 border-bottom pb-2">
+      <input type="text" class="form-control mb-1" [(ngModel)]="proj.title" name="title{{ i }}"
+        placeholder="Project Title" required />
+      <textarea class="form-control mb-1" [(ngModel)]="proj.description" name="description{{ i }}"
+        placeholder="Description"></textarea>
+      <input type="text" class="form-control mb-1" [(ngModel)]="proj.technologiesUsed" name="technologies{{ i }}"
+        placeholder="Technologies Used" />
+      <input type="url" class="form-control mb-1" [(ngModel)]="proj.projectUrl" name="url{{ i }}"
+        placeholder="Project URL" />
     </div>
 
-    <!-- Skills -->
-    <div class="card shadow-sm p-4 mb-4">
-      <h4 class="mb-3">Skills</h4>
-      <ul
-        *ngIf="skillList.length > 0; else noSkill"
-        class="list-group list-group-flush"
-      >
-        <li *ngFor="let skill of skillList" class="list-group-item">
-          🧠 <strong>{{ skill.name }}</strong> - {{ skill.level }}
-        </li>
-      </ul>
-      <ng-template #noSkill>
-        <p>No skill records found.</p>
-      </ng-template>
+    <div class="d-flex justify-content-end">
+      <button type="submit" class="btn btn-success btn-sm">Save</button>
+      <button type="button" class="btn btn-secondary btn-sm ms-2" (click)="isEditingProjects = false">
+        Cancel
+      </button>
     </div>
-  </div>
+  </form>
 
-  <!-- Loading -->
-  <ng-template #loading>
-    <div class="text-center">
-      <div class="spinner-border text-primary mb-2" role="status"></div>
-      <p>Loading user profile...</p>
+  <!-- Read-Only View -->
+  <ng-template #viewProjects>
+    <ul *ngIf="projectList.length > 0; else noProject" class="list-group list-group-flush">
+      <li *ngFor="let proj of projectList" class="list-group-item">
+        🛠️ <strong>{{ proj.title }}</strong><br />
+        {{ proj.description }}<br />
+        <small><strong>Technologies:</strong> {{ proj.technologiesUsed }}</small><br />
+        <a [href]="proj.projectUrl" target="_blank">{{ proj.projectUrl }}</a>
+      </li>
+    </ul>
+    <ng-template #noProject>
+      <p>No project records found.</p>
+    </ng-template>
+
+    <div class="d-flex justify-content-end mt-3">
+      <button class="btn btn-outline-success btn-sm" (click)="onEditProjects()">
+        Edit
+      </button>
+    </div>
+  </ng-template>
+</div>
+
+
+   <!-- Skills -->
+<div class="card shadow-sm p-4 mb-4">
+  <h4 class="mb-3">Skills</h4>
+
+  <!-- Editable Form -->
+  <form *ngIf="isEditingSkills; else viewSkills" (ngSubmit)="submitSkillUpdate()">
+    <div *ngFor="let skill of editableSkillList; let i = index" class="mb-3 border-bottom pb-2">
+      <input
+        type="text"
+        class="form-control mb-1"
+        [(ngModel)]="skill.name"
+        name="skillName{{ i }}"
+        placeholder="Skill Name"
+        required
+      />
+      <input
+        type="text"
+        class="form-control mb-1"
+        [(ngModel)]="skill.level"
+        name="skillLevel{{ i }}"
+        placeholder="Skill Level (e.g., Beginner, Intermediate, Advanced)"
+      />
+    </div>
+
+    <div class="d-flex justify-content-end">
+      <button type="submit" class="btn btn-success btn-sm">Save</button>
+      <button type="button" class="btn btn-secondary btn-sm ms-2" (click)="isEditingSkills = false">
+        Cancel
+      </button>
+    </div>
+  </form>
+
+  <!-- Read-Only View -->
+  <ng-template #viewSkills>
+    <ul *ngIf="skillList.length > 0; else noSkill" class="list-group list-group-flush">
+      <li *ngFor="let skill of skillList" class="list-group-item">
+        🧠 <strong>{{ skill.name }}</strong> - {{ skill.level }}
+      </li>
+    </ul>
+    <ng-template #noSkill>
+      <p>No skill records found.</p>
+    </ng-template>
+
+    <div class="d-flex justify-content-end mt-3">
+      <button class="btn btn-outline-success btn-sm" (click)="onEditSkills()">Edit</button>
     </div>
   </ng-template>
 </div>

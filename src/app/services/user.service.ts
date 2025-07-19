@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import {UserBasicInput} from '../models/user-updation-model';
+import { UserBasicInput } from '../models/user-updation-model';
 
 export interface User {
   id?: number;
@@ -10,7 +10,7 @@ export interface User {
   phone: string;
   aboutMe: string;
   address: string;
-  profileImageUrl:string;
+  profileImageUrl: string;
 }
 
 @Injectable({
@@ -19,7 +19,7 @@ export interface User {
 export class UserService {
   private baseUrl = 'http://localhost:8080/usercontroller';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   getUserById(id: number): Observable<User> {
     return this.http.get<User>(`${this.baseUrl}/userportfolio/${id}`);
@@ -28,6 +28,6 @@ export class UserService {
   updateUserBasicInfo(id: number, userData: UserBasicInput): Observable<User> {
     return this.http.put<User>(`${this.baseUrl}/updatebasicdetails/${id}`, userData);
   }
-  
-  
+
+
 }

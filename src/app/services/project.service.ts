@@ -2,6 +2,7 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { Education } from "./education.service";
+import { ProjectInput } from "../models/user-updation-model";
 
 
 export interface Project {
@@ -25,4 +26,11 @@ export class ProjectService {
   getProjectByUserId(userId: number): Observable<Project[]> {
     return this.http.get<Project[]>(`${this.baseUrl}/userproject/${userId}`);
   }
+
+  updateUserProject(userId: number, projects: ProjectInput[]) {
+        return this.http.put<ProjectInput[]>(
+          `${this.baseUrl}/updateproject/${userId}`,
+          projects
+        );
+      }
 }
