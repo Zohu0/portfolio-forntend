@@ -49,11 +49,11 @@
           name="institution{{i}}">
       </div>
       <div class="col-md-6">
-        <input type="number" class="form-control" placeholder="Start Year" [(ngModel)]="edu.startYear"
+        <input type="text" class="form-control" placeholder="Start Year" [(ngModel)]="edu.startYear"
           name="startYear{{i}}">
       </div>
       <div class="col-md-6">
-        <input type="number" class="form-control" placeholder="End Year" [(ngModel)]="edu.endYear" name="endYear{{i}}">
+        <input type="text" class="form-control" placeholder="End Year" [(ngModel)]="edu.endYear" name="endYear{{i}}">
       </div>
     </div>
     <button type="button" class="btn btn-outline-success mt-3" (click)="addEducation()">+ Add Education</button>
@@ -68,11 +68,11 @@
         <input type="text" class="form-control" placeholder="Company" [(ngModel)]="exp.company" name="company{{i}}">
       </div>
       <div class="col-md-6">
-        <input type="number" class="form-control" placeholder="Start Year" [(ngModel)]="exp.startDate"
+        <input type="text" class="form-control" placeholder="Start Year" [(ngModel)]="exp.startDate"
           name="startDate{{i}}">
       </div>
       <div class="col-md-6">
-        <input type="number" class="form-control" placeholder="End Year" [(ngModel)]="exp.endDate" name="endDate{{i}}">
+        <input type="text" class="form-control" placeholder="End Year" [(ngModel)]="exp.endDate" name="endDate{{i}}">
       </div>
       <div class="col-12">
         <textarea class="form-control" rows="2" placeholder="Description" [(ngModel)]="exp.description"

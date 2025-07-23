@@ -11,15 +11,15 @@ export interface UserBasicInput {
   export interface EducationInput {
   degree: string;
   institution: string;
-  startYear: number;
-  endYear: number;
+  startYear: string;
+  endYear: string;
 }
 
 export interface ExperienceInput {
   jobTitle: string;
   company: string;
-  startDate: number;
-  endDate: number;
+  startDate: string;
+  endDate: string;
   description: string;
 }
 

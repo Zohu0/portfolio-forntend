@@ -83,8 +83,8 @@ export class CreateProfileComponent {
     this.user.educations.push({
       degree: '',
       institution: '',
-      startYear: 0,
-      endYear: 0,
+      startYear: '',
+      endYear: '',
     });
   }
 
@@ -92,8 +92,8 @@ export class CreateProfileComponent {
     this.user.experiences.push({
       jobTitle: '',
       company: '',
-      startDate: 0,
-      endDate: 0,
+      startDate: '',
+      endDate: '',
       description: '',
     });
   }

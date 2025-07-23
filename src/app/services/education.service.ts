@@ -7,8 +7,8 @@ export interface Education {
   id?: number;
   degree: string;
   institution: string;
-  startYear: number; // ✅ matches Java's startYear
-  endYear: number; // ✅ matches Java's endYear
+  startYear: string; // ✅ matches Java's startYear
+  endYear: string; // ✅ matches Java's endYear
   user_id: number;
 }
 

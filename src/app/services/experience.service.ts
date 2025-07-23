@@ -9,8 +9,8 @@ export interface Experience {
   id?: number;
   jobTitle: string;
   company: string;
-  startDate: number;     // ✅ Integer in backend, should be number
-  endDate: number;       // ✅ Integer in backend, should be number
+  startDate: string;     // ✅ Integer in backend, should be number
+  endDate: string;       // ✅ Integer in backend, should be number
   description: string;
   user_id: number;
 }
