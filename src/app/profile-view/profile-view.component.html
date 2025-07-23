@@ -57,11 +57,18 @@
 
       <!-- Read-Only Mode -->
       <ng-template #readModeUserBasic>
-        <p><strong>Full Name:</strong> {{ user.fullName }}</p>
-        <p><strong>Email:</strong> {{ user.email }}</p>
-        <p><strong>Phone:</strong> {{ user.phone }}</p>
-        <p><strong>Address:</strong> {{ user.address }}</p>
-        <p><strong>About Me:</strong> {{ user.aboutMe }}</p>
+        <ng-container *ngIf="user">
+          <p *ngIf="user.fullName"><strong>Full Name:</strong> {{ user.fullName }}</p>
+          <p *ngIf="user.email"><strong>Email:</strong> {{ user.email }}</p>
+          <p *ngIf="user.phone"><strong>Phone:</strong> {{ user.phone }}</p>
+          <p *ngIf="user.address"><strong>Address:</strong> {{ user.address }}</p>
+          <p *ngIf="user.aboutMe"><strong>About Me:</strong> {{ user.aboutMe }}</p>
+        </ng-container>
+      
+        <ng-container *ngIf="!user || (!user.fullName && !user.email && !user.phone && !user.address && !user.aboutMe)">
+          <p>No user basic information found.</p>
+        </ng-container>
+      
         <div class="d-flex justify-content-end mt-3">
           <button class="btn btn-outline-success btn-sm" (click)="onEditToggleBasicInfo()">
             Edit
@@ -95,14 +102,24 @@
 
       <ng-template #viewEducation>
         <ul *ngIf="educationList.length > 0; else noEducation" class="list-group list-group-flush">
-          <li *ngFor="let edu of educationList" class="list-group-item">
-            🎓 <strong>{{ edu.degree }}</strong> at {{ edu.institution }}<br />
-            <small>{{ edu.startYear }} - {{ edu.endYear }}</small>
-          </li>
+          <ng-container *ngFor="let edu of educationList">
+            <li *ngIf="edu.degree || edu.institution || edu.startYear || edu.endYear" class="list-group-item">
+              🎓
+              <strong *ngIf="edu.degree">{{ edu.degree }}</strong>
+              <span *ngIf="edu.degree && edu.institution"> at </span>
+              <span *ngIf="edu.institution">{{ edu.institution }}</span><br />
+      
+              <small *ngIf="edu.startYear || edu.endYear">
+                {{ edu.startYear }}<span *ngIf="edu.startYear && edu.endYear"> - </span>{{ edu.endYear }}
+              </small>
+            </li>
+          </ng-container>
         </ul>
+      
         <ng-template #noEducation>
           <p>No education records found.</p>
         </ng-template>
+      
         <div class="d-flex justify-content-end mt-3">
           <button class="btn btn-outline-success btn-sm" (click)="onEditEducation()">
             Edit
@@ -139,21 +156,33 @@
 
       <ng-template #viewExperience>
         <ul *ngIf="experienceList.length > 0; else noExperience" class="list-group list-group-flush">
-          <li *ngFor="let exp of experienceList" class="list-group-item">
-            💼 <strong>{{ exp.jobTitle }}</strong> at {{ exp.company }}<br />
-            <small>{{ exp.startDate }} - {{ exp.endDate }}</small><br />
-            {{ exp.description }}
-          </li>
+          <ng-container *ngFor="let exp of experienceList">
+            <li *ngIf="exp.jobTitle || exp.company || exp.startDate || exp.endDate || exp.description" class="list-group-item">
+              💼
+              <strong *ngIf="exp.jobTitle">{{ exp.jobTitle }}</strong>
+              <span *ngIf="exp.jobTitle && exp.company"> at </span>
+              <span *ngIf="exp.company">{{ exp.company }}</span><br />
+      
+              <small *ngIf="exp.startDate || exp.endDate">
+                {{ exp.startDate }}<span *ngIf="exp.startDate && exp.endDate"> - </span>{{ exp.endDate }}
+              </small><br />
+      
+              <span *ngIf="exp.description">{{ exp.description }}</span>
+            </li>
+          </ng-container>
         </ul>
+      
         <ng-template #noExperience>
           <p>No experience records found.</p>
         </ng-template>
+      
         <div class="d-flex justify-content-end mt-3">
           <button class="btn btn-outline-success btn-sm" (click)="onEditExperience()">
             Edit
           </button>
         </div>
       </ng-template>
+      
     </div>
 
 
@@ -182,26 +211,30 @@
     </div>
   </form>
 
-  <!-- Read-Only View -->
-  <ng-template #viewProjects>
-    <ul *ngIf="projectList.length > 0; else noProject" class="list-group list-group-flush">
-      <li *ngFor="let proj of projectList" class="list-group-item">
-        🛠️ <strong>{{ proj.title }}</strong><br />
-        {{ proj.description }}<br />
-        <small><strong>Technologies:</strong> {{ proj.technologiesUsed }}</small><br />
-        <a [href]="proj.projectUrl" target="_blank">{{ proj.projectUrl }}</a>
-      </li>
-    </ul>
-    <ng-template #noProject>
-      <p>No project records found.</p>
-    </ng-template>
 
-    <div class="d-flex justify-content-end mt-3">
-      <button class="btn btn-outline-success btn-sm" (click)="onEditProjects()">
-        Edit
-      </button>
-    </div>
+  <!-- Read-Only View -->
+<ng-template #viewProjects>
+  <ul *ngIf="projectList.length > 0; else noProject" class="list-group list-group-flush">
+    <li *ngFor="let proj of projectList" class="list-group-item">
+      🛠️ <strong>{{ proj.title }}</strong><br />
+      <span *ngIf="proj.description">{{ proj.description }}<br /></span>
+      <span *ngIf="proj.technologiesUsed">
+        <small><strong>Technologies:</strong> {{ proj.technologiesUsed }}</small><br />
+      </span>
+      <a *ngIf="proj.projectUrl" [href]="proj.projectUrl" target="_blank">{{ proj.projectUrl }}</a>
+    </li>
+  </ul>
+  <ng-template #noProject>
+    <p>No project records found.</p>
   </ng-template>
+
+  <div class="d-flex justify-content-end mt-3">
+    <button class="btn btn-outline-success btn-sm" (click)="onEditProjects()">
+      Edit
+    </button>
+  </div>
+</ng-template>
+
 </div>
 
 
@@ -240,16 +273,23 @@
   <!-- Read-Only View -->
   <ng-template #viewSkills>
     <ul *ngIf="skillList.length > 0; else noSkill" class="list-group list-group-flush">
-      <li *ngFor="let skill of skillList" class="list-group-item">
-        🧠 <strong>{{ skill.name }}</strong> - {{ skill.level }}
-      </li>
+      <ng-container *ngFor="let skill of skillList">
+        <li *ngIf="skill.name || skill.level" class="list-group-item">
+          🧠
+          <strong *ngIf="skill.name">{{ skill.name }}</strong>
+          <span *ngIf="skill.name && skill.level"> - </span>
+          <span *ngIf="skill.level">{{ skill.level }}</span>
+        </li>
+      </ng-container>
     </ul>
+  
     <ng-template #noSkill>
       <p>No skill records found.</p>
     </ng-template>
-
+  
     <div class="d-flex justify-content-end mt-3">
       <button class="btn btn-outline-success btn-sm" (click)="onEditSkills()">Edit</button>
     </div>
   </ng-template>
+  
 </div>
