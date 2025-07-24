@@ -168,7 +168,8 @@ export class ProfileViewComponent implements OnInit {
   }
 
   submitEducationUpdate() {
-    const userId = this.userId; // Make sure this is already set in your component (e.g., from route param)
+    const userId = this.userId; 
+    // Make sure this is already set in your component (e.g., from route param)
 
     this.educationService
       .updateUserEducations(userId, this.editableEducationList)
@@ -254,6 +255,37 @@ export class ProfileViewComponent implements OnInit {
   }
 
   
+  addSkill() {
+    this.editableSkillList.push({ name: '', level: '' });
+  }
+
+  addEducation() {
+    this.editableEducationList.push({
+      degree: '',
+      institution: '',
+      startYear: '',
+      endYear: ''
+    });
+  }
+
+  addExperience() {
+    this.editableExperienceList.push({
+      jobTitle: '',
+      company: '',
+      startDate: '',
+      endDate: '',
+      description: ''
+    });
+  }
+
+  addProject() {
+    this.editableProjectList.push({
+      title: '',
+      description: '',
+      technologiesUsed: '',
+      projectUrl: ''
+    });
+  }
   
 
 
