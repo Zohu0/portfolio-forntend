@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { UserBasicInput } from '../models/user-updation-model';
+import { UserDto } from '../models/user-dto-model';
 
 export interface User {
   id?: number;
@@ -28,6 +29,8 @@ export class UserService {
   updateUserBasicInfo(id: number, userData: UserBasicInput): Observable<User> {
     return this.http.put<User>(`${this.baseUrl}/updatebasicdetails/${id}`, userData);
   }
+
+  
 
 
 }

@@ -9,6 +9,7 @@ import { Experience, ExperienceService } from '../services/experience.service';
 import { EducationInput, ExperienceInput, ProjectInput, SkillInput, UserBasicInput } from '../models/user-updation-model';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
+import { UserDto } from '../models/user-dto-model';
 
 @Component({
   selector: 'app-profile-view',
@@ -40,6 +41,19 @@ export class ProfileViewComponent implements OnInit {
   experienceList: Experience[] = [];
 
   isEditingProfile = false;
+
+  userDto: UserDto = {
+    fullName: '',
+    email: '',
+    phone: '',
+    aboutMe: '',
+    address: '',
+    profileImageUrl: '',
+    educations: [],
+    experiences: [],
+    skills: [],
+    projects: []
+  };
 
   constructor(
     private userService: UserService,
@@ -322,7 +336,6 @@ toggleProfileEditMode() {
     this.submitExperienceUpdate();
   }
 }
-  
 
 
 
