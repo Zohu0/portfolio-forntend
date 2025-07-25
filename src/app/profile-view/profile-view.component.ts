@@ -39,6 +39,8 @@ export class ProfileViewComponent implements OnInit {
   skillList: Skill[] = [];
   experienceList: Experience[] = [];
 
+  isEditingProfile = false;
+
   constructor(
     private userService: UserService,
     private route: ActivatedRoute,
@@ -188,8 +190,20 @@ export class ProfileViewComponent implements OnInit {
   // Experience Section
   onEditExperience() {
     this.isEditingExperience = true;
-    this.editableExperienceList = JSON.parse(JSON.stringify(this.experienceList));
+  
+    if (this.experienceList.length === 0) {
+      this.editableExperienceList = [{
+        jobTitle: '',
+        company: '',
+        startDate: '',
+        endDate: '',
+        description: ''
+      }];
+    } else {
+      this.editableExperienceList = JSON.parse(JSON.stringify(this.experienceList));
+    }
   }
+  
 
   submitExperienceUpdate() {
     const userId = this.userId; // Make sure this is already set in your component (e.g., from route param)
@@ -286,6 +300,28 @@ export class ProfileViewComponent implements OnInit {
       projectUrl: ''
     });
   }
+
+
+
+toggleProfileEditMode() {
+  this.isEditingProfile = !this.isEditingProfile;
+
+  if (this.isEditingProfile) {
+    // Enter edit mode for all sections
+    this.onEditToggleBasicInfo();
+    this.onEditEducation();
+    this.onEditSkills();
+    this.onEditProjects();
+    this.onEditExperience(); // make sure this handles empty case!
+  } else {
+    // Exit edit mode and save everything
+    this.submitUpdateBasicInfo();
+    this.submitEducationUpdate();
+    this.submitSkillUpdate();
+    this.submitProjectUpdate();
+    this.submitExperienceUpdate();
+  }
+}
   
 
 

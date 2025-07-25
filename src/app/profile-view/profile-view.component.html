@@ -277,5 +277,14 @@
       <button class="btn btn-outline-success btn-sm" (click)="onEditSkills()">Edit</button>
     </div>
   </ng-template>
+
+
   
+</div>
+
+
+<div class="d-flex justify-content-center mt-4">
+  <button class="btn btn-success btn-sm" (click)="toggleProfileEditMode()">
+    {{ isEditingProfile ? 'Save Profile' : 'Update Profile' }}
+  </button>
 </div>
