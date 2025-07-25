@@ -131,64 +131,42 @@
     </div>
 
 
-    <!-- Experience -->
-    <div class="card shadow-sm p-4 mb-4">
-      <h4 class="mb-3">Experience</h4>
+    <!-- Experience Card: Only show if editing OR experiences exist -->
+<div class="card shadow-sm p-4 mb-4"
+*ngIf="isEditingExperience || experienceList.length > 0">
+<h4 class="mb-3">Experience</h4>
 
-      <form *ngIf="isEditingExperience; else viewExperience" (ngSubmit)="submitExperienceUpdate()">
-        <div *ngFor="let exp of editableExperienceList; let i = index" class="mb-3 border-bottom pb-2">
-          <input type="text" class="form-control mb-1" [(ngModel)]="exp.jobTitle" name="jobTitle{{ i }}"
-            placeholder="Job Title" required />
-          <input type="text" class="form-control mb-1" [(ngModel)]="exp.company" name="company{{ i }}"
-            placeholder="Company" />
-          <input type="text" class="form-control mb-1" [(ngModel)]="exp.startDate" name="startDate{{ i }}"
-            placeholder="Start Date" />
-          <input type="text" class="form-control mb-1" [(ngModel)]="exp.endDate" name="endDate{{ i }}"
-            placeholder="End Date" />
-          <textarea class="form-control mb-1" [(ngModel)]="exp.description" name="description{{ i }}"
-            placeholder="Description"></textarea>
-        </div>
-        <div class="d-flex justify-content-between">
-          <button type="button" class="btn btn-outline-primary btn-sm" (click)="addExperience()">+ Add  Experience</button>
-          <div>
-            <button type="submit" class="btn btn-success btn-sm">Save</button>
-            <button type="button" class="btn btn-secondary btn-sm ms-2" (click)="isEditingExperience = false">Cancel</button>
-          </div>
-        </div>
-        
-      </form>
+<!-- Form shown while editing -->
+<form *ngIf="isEditingExperience; else viewExperience" (ngSubmit)="submitExperienceUpdate()">
+<div *ngFor="let exp of editableExperienceList; let i = index" class="mb-3 border-bottom pb-2">
+ <!-- Form Fields Here -->
+</div>
 
-      <ng-template #viewExperience>
-        <ul *ngIf="experienceList.length > 0; else noExperience" class="list-group list-group-flush">
-          <ng-container *ngFor="let exp of experienceList">
-            <li *ngIf="exp.jobTitle || exp.company || exp.startDate || exp.endDate || exp.description" class="list-group-item">
-              💼
-              <strong *ngIf="exp.jobTitle">{{ exp.jobTitle }}</strong>
-              <span *ngIf="exp.jobTitle && exp.company"> at </span>
-              <span *ngIf="exp.company">{{ exp.company }}</span><br />
-      
-              <small *ngIf="exp.startDate || exp.endDate">
-                {{ exp.startDate }}<span *ngIf="exp.startDate && exp.endDate"> - </span>{{ exp.endDate }}
-              </small><br />
-      
-              <span *ngIf="exp.description">{{ exp.description }}</span>
-            </li>
-          </ng-container>
-        </ul>
-      
-        <ng-template #noExperience>
-          <p>No experience records found.</p>
-        </ng-template>
-      
-        <div class="d-flex justify-content-end mt-3">
-          <button class="btn btn-outline-success btn-sm" (click)="onEditExperience()">
-            Edit
-          </button>
-        </div>
-      </ng-template>
-      
-    </div>
+<div class="d-flex justify-content-between">
+ <button type="button" class="btn btn-outline-primary btn-sm" (click)="addExperience()">+ Add Experience</button>
+ <div>
+   <button type="submit" class="btn btn-success btn-sm">Save</button>
+   <button type="button" class="btn btn-secondary btn-sm ms-2" (click)="isEditingExperience = false">Cancel</button>
+ </div>
+</div>
+</form>
 
+<!-- View mode -->
+<ng-template #viewExperience>
+<ul class="list-group list-group-flush">
+ <ng-container *ngFor="let exp of experienceList">
+   <li *ngIf="exp.jobTitle || exp.company || exp.startDate || exp.endDate || exp.description"
+       class="list-group-item">
+     <!-- Experience display here -->
+   </li>
+ </ng-container>
+</ul>
+
+<div class="d-flex justify-content-end mt-3">
+ <button class="btn btn-outline-success btn-sm" (click)="onEditExperience()">Edit</button>
+</div>
+</ng-template>
+</div>
 
     <!-- Projects -->
 <div class="card shadow-sm p-4 mb-4">
