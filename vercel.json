@@ -1,5 +1,4 @@
 {
-  "outputDirectory": "dist/portfolio-angular",
   "rewrites": [
     { "source": "/(.*)", "destination": "/index.html" }
   ]
