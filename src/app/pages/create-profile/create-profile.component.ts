@@ -12,6 +12,7 @@ import {
   SkillInput,
   ProjectInput,
 } from '../../models/user-input.model';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-create-profile',
@@ -52,7 +53,7 @@ export class CreateProfileComponent {
   }
 
   // Make the POST request to backend
-  this.http.post<any>('http://localhost:8080/usercontroller/createuserwithimage', formData)
+  this.http.post<any>(`${environment.apiUrlUser}/createuserwithimage`, formData)
     .subscribe({
       next: (res) => {
         console.log('Response:', res);

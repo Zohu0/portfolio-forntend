@@ -3,6 +3,7 @@ import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { Education } from "./education.service";
 import { SkillInput } from "../models/user-updation-model";
+import { environment } from "../../environments/environment";
 
 
 export interface Skill {
@@ -17,7 +18,7 @@ export interface Skill {
 })
 
 export class SkillService {
-  private baseUrl = 'http://localhost:8080/skillcontroller';
+  private baseUrl = environment.apiUrlSkill;
 
   constructor(private http: HttpClient) {}
 

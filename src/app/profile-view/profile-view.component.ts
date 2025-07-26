@@ -10,6 +10,7 @@ import { EducationInput, ExperienceInput, ProjectInput, SkillInput, UserBasicInp
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { UserDto } from '../models/user-dto-model';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-profile-view',
@@ -19,6 +20,8 @@ import { UserDto } from '../models/user-dto-model';
   styleUrls: ['./profile-view.component.css'],
 })
 export class ProfileViewComponent implements OnInit {
+
+  imageBaseUrl = environment.apiUrlUser.replace('/usercontroller', '');
   user: User | null = null;
   editableUserBasic!: UserBasicInput;
   isEditing: boolean = false;
@@ -129,7 +132,7 @@ export class ProfileViewComponent implements OnInit {
 
       this.http
         .put(
-          `http://localhost:8080/usercontroller/updateuserimage/${this.userId}`,
+          `${environment.apiUrlUser}/updateuserimage/${this.userId}`,
           formData
         )
         .subscribe({

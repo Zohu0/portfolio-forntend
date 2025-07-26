@@ -3,6 +3,7 @@ import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { Education } from "./education.service";
 import { ProjectInput } from "../models/user-updation-model";
+import { environment } from "../../environments/environment";
 
 
 export interface Project {
@@ -19,7 +20,7 @@ export interface Project {
 })
 
 export class ProjectService {
-  private baseUrl = 'http://localhost:8080/projectcontroller';
+  private baseUrl = environment.apiUrlProject;
 
   constructor(private http: HttpClient) {}
 

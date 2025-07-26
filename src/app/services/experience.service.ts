@@ -3,6 +3,7 @@ import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { Education } from "./education.service";
 import { ExperienceInput } from "../models/user-updation-model";
+import { environment } from "../../environments/environment";
 
 
 export interface Experience {
@@ -20,7 +21,7 @@ export interface Experience {
 })
 
 export class ExperienceService {
-  private baseUrl = 'http://localhost:8080/experiencecontroller';
+  private baseUrl = environment.apiUrlExperience;
 
   constructor(private http: HttpClient) {}
 

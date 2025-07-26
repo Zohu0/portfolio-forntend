@@ -3,6 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { UserBasicInput } from '../models/user-updation-model';
 import { UserDto } from '../models/user-dto-model';
+import { environment } from '../../environments/environment';
+
 
 export interface User {
   id?: number;
@@ -18,7 +20,7 @@ export interface User {
   providedIn: 'root'
 })
 export class UserService {
-  private baseUrl = 'http://localhost:8080/usercontroller';
+  private baseUrl = environment.apiUrlUser;
 
   constructor(private http: HttpClient) { }
 
