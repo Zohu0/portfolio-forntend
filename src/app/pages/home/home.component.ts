@@ -3,6 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-home',
@@ -36,7 +37,7 @@ export class HomeComponent {
       .set('eMail', this.searchTerm);
 
     this.http
-      .get<any[]>('http://localhost:8080/usercontroller/search', { params })
+      .get<any[]>(`${environment.apiUrlUser}/search`, { params })
       .subscribe({
         next: (data) => (this.searchResults = data),
         error: (err) => console.error('Search failed', err),
