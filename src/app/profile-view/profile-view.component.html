@@ -132,8 +132,8 @@
 
 
     <!-- Experience Card: Only show if editing OR experiences exist -->
-<div class="card shadow-sm p-4 mb-4"
-*ngIf="isEditingExperience || experienceList.length > 0">
+    <div class="card shadow-sm p-4 mb-4"
+    *ngIf="isEditingProfile || isEditingExperience || experienceList.length > 0">
 <h4 class="mb-3">Experience</h4>
 
 <!-- Form shown while editing -->
