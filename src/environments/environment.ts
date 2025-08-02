@@ -1,17 +1,17 @@
 export const environment = {
   production: false,
 
-  //  apiUrlUser: 'http://localhost:8080/usercontroller',
+  //   apiUrlUser: 'http://localhost:8080/usercontroller',
 
-  // apiUrlEducation: 'http://localhost:8080/educationcontroller',
+  //  apiUrlEducation: 'http://localhost:8080/educationcontroller',
 
-  //  apiUrlExperience: 'http://localhost:8080/experiencecontroller',
+  //   apiUrlExperience: 'http://localhost:8080/experiencecontroller',
 
-  // apiUrlProject: 'http://localhost:8080/projectcontroller',
+  //  apiUrlProject: 'http://localhost:8080/projectcontroller',
 
-  //  apiUrlSkill: 'http://localhost:8080/skillcontroller',
+  //   apiUrlSkill: 'http://localhost:8080/skillcontroller',
 
-  //  apiBaseUrl: 'http://localhost:8080' 
+  //   apiBaseUrl: 'http://localhost:8080' 
 
 
     apiBaseUrl: "https://portfolio-backend-production-e1b6.up.railway.app",
