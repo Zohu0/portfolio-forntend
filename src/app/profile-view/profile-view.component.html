@@ -18,7 +18,7 @@
       </div>
       <div class="text-center mt-3">
         <input type="file" id="imageUpload" hidden (change)="onImageSelected($event)" [disabled]="!userId" />
-        <label for="imageUpload" class="btn btn-sm btn-primary px-4 py-2 fw-semibold">
+        <label *ngIf="isOwnerProfile"  for="imageUpload" class="btn btn-sm btn-primary px-4 py-2 fw-semibold">
           <i class="bi bi-upload me-2"></i>Upload Image
         </label>
       </div>
@@ -69,7 +69,7 @@
           <p>No user basic information found.</p>
         </ng-container>
       
-        <div class="d-flex justify-content-end mt-3">
+        <div *ngIf="isOwnerProfile" class="d-flex justify-content-end mt-3">
           <button class="btn btn-outline-success btn-sm" (click)="onEditToggleBasicInfo()">
             Edit
           </button>
@@ -92,8 +92,8 @@
           <input type="text" class="form-control mb-1" [(ngModel)]="edu.endYear" name="endYear{{ i }}"
             placeholder="End Year" />
         </div>
-        <div class="d-flex justify-content-between">
-          <button type="button" class="btn btn-outline-primary btn-sm" (click)="addEducation()">+ Add Skill</button>
+        <div *ngIf="isOwnerProfile" class="d-flex justify-content-between">
+          <button type="button" class="btn btn-outline-primary btn-sm" (click)="addEducation()">+ Add Education</button>
           <div>
             <button type="submit" class="btn btn-success btn-sm">Save</button>
             <button type="button" class="btn btn-secondary btn-sm ms-2" (click)="isEditingEducation = false">Cancel</button>
@@ -122,7 +122,7 @@
           <p>No education records found.</p>
         </ng-template>
       
-        <div class="d-flex justify-content-end mt-3">
+        <div *ngIf="isOwnerProfile" class="d-flex justify-content-end mt-3">
           <button class="btn btn-outline-success btn-sm" (click)="onEditEducation()">
             Edit
           </button>
@@ -152,7 +152,7 @@
             <p>No experience added yet. Click "Edit" to add some.</p>
           </ng-template>
     
-          <div class="d-flex justify-content-end mt-3">
+          <div *ngIf="isOwnerProfile" class="d-flex justify-content-end mt-3">
             <button class="btn btn-outline-success btn-sm" (click)="onEditExperience()">Edit</button>
           </div>
         </ng-container>
@@ -241,7 +241,7 @@
     <p>No project records found.</p>
   </ng-template>
 
-  <div class="d-flex justify-content-end mt-3">
+  <div *ngIf="isOwnerProfile" class="d-flex justify-content-end mt-3">
     <button class="btn btn-outline-success btn-sm" (click)="onEditProjects()">
       Edit
     </button>
@@ -302,7 +302,7 @@
       <p>No skill records found.</p>
     </ng-template>
   
-    <div class="d-flex justify-content-end mt-3">
+    <div *ngIf="isOwnerProfile" class="d-flex justify-content-end mt-3">
       <button class="btn btn-outline-success btn-sm" (click)="onEditSkills()">Edit</button>
     </div>
   </ng-template>
@@ -312,7 +312,7 @@
 </div>
 
 
-<div class="d-flex justify-content-center mt-4">
+<div *ngIf="isOwnerProfile" class="d-flex justify-content-center mt-4">
   <button class="btn btn-success btn-sm" (click)="toggleProfileEditMode()">
     {{ isEditingProfile ? 'Save Profile' : 'Update Profile' }}
   </button>

@@ -16,14 +16,14 @@
 
     <!-- Basic Info -->
     <div class="row g-3">
-      <div class="col-md-6">
+      <!-- <div class="col-md-6">
         <label class="form-label fw-semibold">Full Name</label>
         <input type="text" class="form-control" [(ngModel)]="user.fullName" name="fullName" required>
       </div>
       <div class="col-md-6">
         <label class="form-label fw-semibold">Email</label>
         <input type="email" class="form-control" [(ngModel)]="user.email" name="email" required>
-      </div>
+      </div> -->
       <div class="col-md-6">
         <label class="form-label fw-semibold">Phone</label>
         <input type="text" class="form-control" [(ngModel)]="user.phone" name="phone" required>
@@ -42,18 +42,18 @@
     <h4 class="mt-5 text-success fw-bold">Education</h4>
     <div *ngFor="let edu of user.educations; let i = index" class="row g-3 border rounded p-3 mt-3">
       <div class="col-md-6">
-        <input type="text" class="form-control" placeholder="Degree" [(ngModel)]="edu.degree" name="degree{{i}}">
+        <input type="text" class="form-control" placeholder="Degree" [(ngModel)]="edu.degree" name="degree{{i}}" required>
       </div>
       <div class="col-md-6">
-        <input type="text" class="form-control" placeholder="Institution" [(ngModel)]="edu.institution"
+        <input type="text" class="form-control" placeholder="Institution" [(ngModel)]="edu.institution" required>
           name="institution{{i}}">
       </div>
       <div class="col-md-6">
-        <input type="text" class="form-control" placeholder="Start Year" [(ngModel)]="edu.startYear"
+        <input type="text" class="form-control" placeholder="Start Year" [(ngModel)]="edu.startYear" required>
           name="startYear{{i}}">
       </div>
       <div class="col-md-6">
-        <input type="text" class="form-control" placeholder="End Year" [(ngModel)]="edu.endYear" name="endYear{{i}}">
+        <input type="text" class="form-control" placeholder="End Year" [(ngModel)]="edu.endYear" name="endYear{{i}}" required>
       </div>
     </div>
     <button type="button" class="btn btn-outline-success mt-3" (click)="addEducation()">+ Add Education</button>

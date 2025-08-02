@@ -1,21 +1,27 @@
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-home',
+  standalone: true,
   imports: [RouterModule, CommonModule, FormsModule],
   templateUrl: './home.component.html',
-  styleUrl: './home.component.css',
+  styleUrls: ['./home.component.css'],
 })
-export class HomeComponent {
+export class HomeComponent implements OnInit {
   searchTerm: string = '';
   searchResults: any[] = [];
+  isLoggedIn: boolean = false;
 
-  constructor(private http: HttpClient, private router: Router) { }
+  constructor(private http: HttpClient, private router: Router) {}
+
+  ngOnInit() {
+    this.isLoggedIn = !!localStorage.getItem('token');
+  }
 
   onSearchChange() {
     if (this.searchTerm.trim().length > 2) {
@@ -45,11 +51,16 @@ export class HomeComponent {
   }
 
   goToProfile(user: any) {
-    console.log('Navigating to user: ', user);
     if (user.id) {
       this.router.navigate(['/profile', user.id]);
+    }
+  }
+
+  onGetStartedClick() {
+    if (this.isLoggedIn) {
+      this.router.navigate(['/create-portfolio']);
     } else {
-      console.warn('User ID is missing: ', user);
+      this.router.navigate(['/login']);
     }
   }
 }

@@ -13,6 +13,7 @@ import {
   ProjectInput,
 } from '../../models/user-input.model';
 import { environment } from '../../../environments/environment';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-create-profile',
@@ -41,31 +42,56 @@ export class CreateProfileComponent {
   constructor(private http: HttpClient, private router: Router) {}
 
   onSubmit(): void {
-  const formData = new FormData();
-
-  // Serialize the user object as JSON and append it as a Blob
-  const userJson = JSON.stringify(this.user);
-  formData.append('user', new Blob([userJson], { type: 'application/json' }));
-
-  // Append the selected image file (if any)
-  if (this.selectedFile) {
-    formData.append('image', this.selectedFile);
+    const hasValidEducation = this.user.educations.every(edu =>
+      edu.degree?.trim() &&
+      edu.institution?.trim() &&
+      edu.startYear?.trim() &&
+      edu.endYear?.trim()
+    );
+  
+    if (!hasValidEducation || this.user.educations.length === 0) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Incomplete Education',
+        text: 'Please fill all required education fields before submitting.',
+        confirmButtonColor: '#3085d6'
+      });
+      return;
+    }
+  
+    const formData = new FormData();
+    const userJson = JSON.stringify(this.user);
+    formData.append('user', new Blob([userJson], { type: 'application/json' }));
+  
+    if (this.selectedFile) {
+      formData.append('image', this.selectedFile);
+    }
+  
+    this.http.post<any>(`${environment.apiUrlUser}/createuserwithimage`, formData)
+      .subscribe({
+        next: (res) => {
+          Swal.fire({
+            icon: 'success',
+            title: 'Profile Created',
+            text: '🎉 Your profile has been created successfully!',
+            confirmButtonColor: '#3085d6'
+          }).then(() => {
+            this.router.navigate(['/profile', res.userId]);
+          });
+        },
+        error: (err) => {
+          console.error('❌ Error creating profile:', err);
+          Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Failed to create profile. Please try again.',
+            confirmButtonColor: '#d33'
+          });
+        }
+      });
   }
-
-  // Make the POST request to backend
-  this.http.post<any>(`${environment.apiUrlUser}/createuserwithimage`, formData)
-    .subscribe({
-      next: (res) => {
-        console.log('Response:', res);
-        // Assuming backend returns userId in response
-        this.router.navigate(['/profile', res.userId]);
-      },
-      error: (err) => {
-        console.error('Error creating profile:', err);
-        alert('Failed to create profile.');
-      }
-    });
-}
+  
+  
 
 
   onFileSelected(event: any): void {

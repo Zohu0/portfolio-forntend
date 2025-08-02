@@ -32,6 +32,8 @@ export class ProfileViewComponent implements OnInit {
   isEditingProjects = false;
   isEditingSkills = false;
 
+  isOwnerProfile: boolean = false;
+
   // Editable copies
   editableEducationList: EducationInput[] = [];
   editableExperienceList: ExperienceInput[] = [];
@@ -74,10 +76,18 @@ export class ProfileViewComponent implements OnInit {
       console.error('No user ID found in route.');
       return;
     }
-
+  
     this.userId = Number(idFromRoute);
+    const loggedInUserId = localStorage.getItem('userId');
+  
+    this.isOwnerProfile = loggedInUserId !== null && +loggedInUserId === this.userId;
+  
     this.loadUser();
     this.loadAllOtherData();
+  
+    console.log('Route userId:', this.userId);
+    console.log('Logged-in userId:', loggedInUserId);
+    console.log('isOwnerProfile:', this.isOwnerProfile);
   }
 
   loadUser() {
@@ -187,7 +197,7 @@ export class ProfileViewComponent implements OnInit {
   }
 
   submitEducationUpdate() {
-    const userId = this.userId; 
+    const userId = this.userId;
     // Make sure this is already set in your component (e.g., from route param)
 
     this.educationService
@@ -207,7 +217,7 @@ export class ProfileViewComponent implements OnInit {
   // Experience Section
   onEditExperience() {
     this.isEditingExperience = true;
-  
+
     if (this.experienceList.length === 0) {
       this.editableExperienceList = [{
         jobTitle: '',
@@ -220,7 +230,7 @@ export class ProfileViewComponent implements OnInit {
       this.editableExperienceList = JSON.parse(JSON.stringify(this.experienceList));
     }
   }
-  
+
 
   submitExperienceUpdate() {
     const userId = this.userId; // Make sure this is already set in your component (e.g., from route param)
@@ -263,7 +273,7 @@ export class ProfileViewComponent implements OnInit {
   }
 
   // Skill Section
-  onEditSkills(){
+  onEditSkills() {
     this.isEditingSkills = true;
     this.editableSkillList = JSON.parse(JSON.stringify(this.skillList))
   }
@@ -285,7 +295,7 @@ export class ProfileViewComponent implements OnInit {
       });
   }
 
-  
+
   addSkill() {
     this.editableSkillList.push({ name: '', level: '' });
   }
@@ -320,25 +330,25 @@ export class ProfileViewComponent implements OnInit {
 
 
 
-toggleProfileEditMode() {
-  this.isEditingProfile = !this.isEditingProfile;
+  toggleProfileEditMode() {
+    this.isEditingProfile = !this.isEditingProfile;
 
-  if (this.isEditingProfile) {
-    // Enter edit mode for all sections
-    this.onEditToggleBasicInfo();
-    this.onEditEducation();
-    this.onEditSkills();
-    this.onEditProjects();
-    this.onEditExperience(); // make sure this handles empty case!
-  } else {
-    // Exit edit mode and save everything
-    this.submitUpdateBasicInfo();
-    this.submitEducationUpdate();
-    this.submitSkillUpdate();
-    this.submitProjectUpdate();
-    this.submitExperienceUpdate();
+    if (this.isEditingProfile) {
+      // Enter edit mode for all sections
+      this.onEditToggleBasicInfo();
+      this.onEditEducation();
+      this.onEditSkills();
+      this.onEditProjects();
+      this.onEditExperience(); // make sure this handles empty case!
+    } else {
+      // Exit edit mode and save everything
+      this.submitUpdateBasicInfo();
+      this.submitEducationUpdate();
+      this.submitSkillUpdate();
+      this.submitProjectUpdate();
+      this.submitExperienceUpdate();
+    }
   }
-}
 
 
 
