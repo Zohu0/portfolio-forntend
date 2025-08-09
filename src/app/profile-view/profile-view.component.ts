@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
 import { UserService, User } from '../services/user.service';
 import { RouterOutlet, ActivatedRoute } from '@angular/router';
 import { Education, EducationService } from '../services/education.service';
@@ -350,6 +350,7 @@ export class ProfileViewComponent implements OnInit {
     }
   }
 
+  
 
 
 }

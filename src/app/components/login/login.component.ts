@@ -90,6 +90,14 @@ export class LoginComponent {
       }
     });
   }
+
+  password: string = '';
+showPassword: boolean = false;
+
+togglePassword() {
+  this.showPassword = !this.showPassword;
+}
+
   
   
   
